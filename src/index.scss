@@ -30,20 +30,17 @@ header {
   }
 }
 
+.items{
+  display:flex;
+  flex-wrap: wrap;
+}
+
 .content {
+
+
   h1 {
     margin: 0;
   }
-}
-
-.button {
-  background:#FFFFFF;
-  border: 1px solid #F2F2F2;
-  box-sizing: border-box;
-  border-right: 8px;
-  height: 32px;
-  width: 32px;
-  cursor: pointer;
 }
 
 .search-block {
@@ -83,7 +80,7 @@ header {
   display: flex;
   flex-direction: column;
   position: absolute;
-  width: 420px;
+  width: 450px;
   height: 100%;
   right: 0;
   background: #ffffff;

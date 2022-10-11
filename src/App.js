@@ -1,31 +1,52 @@
+import { useState, useEffect } from 'react'
+
 import { Card } from "./components/Card";
 import { Header } from './components/Header'
 import { Drawer } from './components/Drawer'
 
 
-const card =[
-  {title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: '12 999 руб.', img: '/img/sneakers/1.jpg'},
-  {title: 'Мужские Кроссовки Nike Air Max 270', price: '15 600 руб.', img: '/img/sneakers/2.jpg'},
-  {title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: '8 499 руб.', img: '/img/sneakers/3.jpg'},
-  {title: 'Кроссовки Puma X Aka Boku Future Rider', price: '8 999 руб.', img: '/img/sneakers/4.jpg'},
-]
-
 const App = () => {
+  const [cart, setCart] = useState(false)
+  const [items, setItems] = useState([])
+  const [cartItems, setCartItems] = useState([])
+
+  useEffect(() => {
+    fetch('https://63457c9fdcae733e8ff3f06d.mockapi.io/items')
+      .then(res => res.json())
+      .then(item => setItems(item))
+      .catch(e => console.warn(e))
+  },[])
+
+
+  const onAddToCard = (obj) => {
+    setCartItems(item => [...item, obj])
+  }
+  
+
   return (
     <div className="wrapper clear">
-      <Drawer />
-      <Header />
+      {
+        cart && (<Drawer cartItems={cartItems} setCart={setCart}/>)
+      }
+      <Header setCart={setCart}/>
       <div className='content p-40' >
-        <div className='d-flex align-center mb-40 justify-between'>
+        <div className='d-flex align-center mb-40 justify-between mb-40'>
           <h1 >Все кроссовки</h1>
           <div className='search-block d-flex'>
             <img src='/img/search.svg' alt='Search'/>
             <input placeholder='Поиск ...'/>
           </div>
         </div>
-        <div className='d-flex justify-between'>
+        <div className='items d-flex'>
           {
-            card.map(e => <Card key={e.title} title={e.title} price={e.price} img={e.img}/> )
+            items.map(e => (
+              <Card  
+                key={e.id} title={e.title} 
+                price={e.price} 
+                img={e.img}
+                id={e.id}
+                onAddToCard={onAddToCard}
+                />) )
           }
         </div>
       </div>

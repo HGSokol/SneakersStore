@@ -1,17 +1,23 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
 import styles from'./Card.module.scss'
 
 
-export const Card = ({title, price, img}) => {
+export const Card = ({id,title, price, img, onAddToCard}) => {
     const [toggle, setToggle] = useState(false)
+    const [cartAdd, setCartAdd] = useState(false)
 
     const toggleLike = () => {
         setToggle(toggle => !toggle)
     }
+    const toggleCardAdd = () => {
+        setCartAdd(cartAdd1=> !cartAdd1)
+        onAddToCard({title,price,img})
 
+    }
+    
     return (
-        <div className={styles.card}>
+        <div className={styles.card} >
             <div onClick={toggleLike} className={styles.favourite}>
                 <img src={`/img/${toggle ? 'liked':'unliked'}.svg`} alt='Unliked'/>
             </div>
@@ -20,11 +26,13 @@ export const Card = ({title, price, img}) => {
             <div className='d-flex justify-between align-center'>
                 <div className='f-flex flex-column'>
                     <span>Цена:</span>
-                    <b>{price}</b>
+                    <b>{price} руб.</b>
                 </div>
-                    <button className='button'>
-                    <img width={11} heigth={11} src='/img/plus.svg' alt='add card' />
-                </button>
+                    <img 
+                        className={styles.plus}
+                        onClick={toggleCardAdd}  
+                        src={`/img/${cartAdd ? 'btn-checked' : 'btn-plus'}.svg`} 
+                        alt='add card' />
             </div>
         </div>
     )
