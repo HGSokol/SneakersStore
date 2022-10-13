@@ -82,14 +82,11 @@ const App = () => {
 
   const onAddToFavorite = async (obj) => {
     try {
-      if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
+      if (favorites.find(favObj => Number(favObj.id) === Number(obj.id))) {
         axios.delete(`https://63457c9fdcae733e8ff3f06d.mockapi.io/favourite/${obj.id}`);
-        setFavorites((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)));
+        setFavorites(prev => prev.filter(item => Number(item.id) !== Number(obj.id)));
       } else {
-        const { data } = await axios.post(
-          'https://63457c9fdcae733e8ff3f06d.mockapi.io/favourite',
-          obj,
-        );
+        const { data } = await axios.post('https://63457c9fdcae733e8ff3f06d.mockapi.io/favourite',obj);
         setFavorites((prev) => [...prev, data]);
       }
     } catch (error) {
@@ -117,28 +114,18 @@ const App = () => {
         onAddToCart,
         setCartOpened,
         setCartItems,
+        searchValue,
+        setSearchValue,
+        onChangeSearchInput,
+        isLoading,
+        onRemoveItem,
+        cartOpened,
       }}>
       <div className="wrapper clear">
-        <Drawer
-          items={cartItems}
-          onClose={() => setCartOpened(false)}
-          onRemove={onRemoveItem}
-          opened={cartOpened}
-        />
-        <Header onClickCart={() => setCartOpened(true)} />
+        <Drawer items={cartItems} />
+        <Header />
         <Routes>
-          <Route path="/" element={
-            <Home
-              items={items}
-              cartItems={cartItems}
-              searchValue={searchValue}
-              setSearchValue={setSearchValue}
-              onChangeSearchInput={onChangeSearchInput}
-              onAddToFavorite={onAddToFavorite}
-              onAddToCart={onAddToCart}
-              isLoading={isLoading}
-            />
-          }/>
+          <Route path="/" element={<Home />}/>
           <Route path="/favorites" element={<Favorites />}/>
           <Route path="/orders" element={<Orders />}/>
         </Routes>

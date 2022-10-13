@@ -1,9 +1,12 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useCart } from '../hooks/useCart';
+import AppContext from '../context';
 
 
-const Header = ({onClickCart}) => {
+const Header = () => {
+  const { setCartOpened } = useContext(AppContext)
   const { totalPrice } = useCart();
 
   return (
@@ -12,13 +15,13 @@ const Header = ({onClickCart}) => {
         <div className="d-flex align-center">
           <img width={40} height={40} src="img/logo.png" alt="Logotype" />
           <div>
-            <h3 className="text-uppercase">React Sneakers</h3>
-            <p className="opacity-5">Магазин лучших кроссовок</p>
+            <h3 className="text-uppercase">Sneakers Store</h3>
+            <p className="opacity-5">Магазин кроссовок</p>
           </div>
         </div>
       </Link>
       <ul className="d-flex">
-        <li onClick={onClickCart} className="mr-30 cu-p">
+        <li onClick={() => setCartOpened(true)} className="mr-30 cu-p">
           <img width={18} height={18} src="img/cart.svg" alt="Корзина" />
           <span>{totalPrice} руб.</span>
         </li>

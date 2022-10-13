@@ -6,23 +6,23 @@ import AppContext from '../../context';
 import styles from './Card.module.scss';
 
 
-function Card({id, title, img, price, onFavorite, onPlus, favorited = false, loading = false}) {
-  const { isItemAdded } = useContext(AppContext);
+function Card({id, title, img, price, favorited = false}) {
+  const { isItemAdded, onAddToFavorite, onAddToCart, isLoading = false } = useContext(AppContext);
   const [isFavorite, setIsFavorite] = useState(favorited);
   const obj = { id, parentId: id, title, img, price };
 
   const onClickPlus = () => {
-    onPlus(obj);
+    onAddToCart(obj);
   };
 
   const onClickFavorite = () => {
-    onFavorite(obj);
-    setIsFavorite(!isFavorite);
+    onAddToFavorite(obj);
+    setIsFavorite(prev => !prev);
   };
 
   return (
     <div className={styles.card}>
-      {loading ? (
+      {isLoading ? (
         <ContentLoader
           speed={2}
           width={155}
@@ -38,7 +38,7 @@ function Card({id, title, img, price, onFavorite, onPlus, favorited = false, loa
         </ContentLoader>
       ) : (
         <>
-          {onFavorite && (
+          {onAddToFavorite && (
             <div className={styles.favorite} onClick={onClickFavorite}>
               <img src={isFavorite ? 'img/liked.svg' : 'img/unliked.svg'} alt="Unliked" />
             </div>
@@ -50,7 +50,7 @@ function Card({id, title, img, price, onFavorite, onPlus, favorited = false, loa
               <span>Цена:</span>
               <b>{price} руб.</b>
             </div>
-            {onPlus && (
+            {onAddToCart && (
               <img
                 className={styles.plus}
                 onClick={onClickPlus}

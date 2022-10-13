@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 
+import AppContext from '../../context';
 import Info from '../Info';
 import { useCart } from '../../hooks/useCart';
 
@@ -9,7 +10,9 @@ import styles from './Drawer.module.scss';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function Drawer({ onClose, onRemove, items = [], opened }) {
+function Drawer({items = []}) {
+  const { setCartOpened, onRemoveItem, cartOpened } = useContext(AppContext)
+
   const { cartItems, setCartItems, totalPrice } = useCart();
   const [orderId, setOrderId] = useState(null);
   const [isOrderComplete, setIsOrderComplete] = useState(false);
@@ -37,10 +40,10 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
   };
 
   return (
-    <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
+    <div className={`${styles.overlay} ${cartOpened ? styles.overlayVisible : ''}`}>
       <div className={styles.drawer}>
         <h2 className="d-flex justify-between mb-30">
-          Корзина <img onClick={onClose} className="cu-p" src="img/btn-remove.svg" alt="Close" />
+          Корзина <img onClick={() => setCartOpened(false)} className="cu-p" src="img/btn-remove.svg" alt="Close" />
         </h2>
 
         {items.length > 0 ? (
@@ -57,7 +60,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
                     <b>{obj.price} руб.</b>
                   </div>
                   <img
-                    onClick={() => onRemove(obj.id)}
+                    onClick={() => onRemoveItem(obj.id)}
                     className="removeBtn"
                     src="img/btn-remove.svg"
                     alt="Remove"
@@ -75,7 +78,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
                 <li>
                   <span>Налог 5%:</span>
                   <div></div>
-                  <b>{(totalPrice / 100) * 5} руб. </b>
+                  <b>{((totalPrice / 100) * 5).toFixed(2)} руб. </b>
                 </li>
               </ul>
               <button disabled={isLoading} onClick={onClickOrder} className="greenButton">
